@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activities Page</title>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* Навигационная панель */
+        .navbar {
+            width: 100%;
+            background-color: #4CAF50;
+            padding: 10px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 16px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        /* Основной контейнер */
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #444;
+        }
+
+        /* Стили для карточек */
+        .activity-list {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .activity-card {
+            width: 45%;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .activity-card h3 {
+            margin: 0;
+            color: #4CAF50;
+        }
+
+        .activity-card p {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .activity-card em {
+            display: block;
+            margin-top: 10px;
+            font-style: normal;
+            color: #888;
+        }
+
+        /* Кнопка добавления активности */
+        .add-activity-btn {
+            display: inline-block;
+            margin: 10px 0;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-activity-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Форма для добавления активности */
+        #add-activity-form {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-activity-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-activity-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+    <script>
+        function showAddActivityForm() {
+            const form = document.getElementById("add-activity-form");
+            form.style.display = "block";
+        }
+    </script>
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <div class="navbar">
+        <a href="/activities">Activities</a>
+        <a href="/analytics">Analytics</a>
+        <a href="/myaccount">My Account</a>
+    </div>
+
+    <!-- Заголовок страницы -->
+    <h1>Activities Page</h1>
+
+    <!-- Основной контейнер -->
+    <div class="container">
+        <!-- Кнопка для добавления активности -->
+        <button class="add-activity-btn" onclick="showAddActivityForm()">Добавить активность</button>
+
+        <!-- Список активностей -->
+        <div class="activity-list" id="activity-list">
+            <h2>Список активностей</h2>
+            {% for activity in activities %}
+                <div class="activity-card">
+                    <h3>{{ activity.name }}</h3>
+                    <p>{{ activity.description }}</p>
+                    <em>События: {{ activity.events | join(', ') }}</em>
+                    <form method="POST" action="{{ url_for('delete_exhibition', activity_name=activity.name) }}">
+                        <button class="delete-activity-btn" type="submit">Удалить</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Форма для добавления новой активности -->
+        <form id="add-activity-form" method="POST">
+            <h3>Новая активность</h3>
+            <label for="activity-name">Название активности:</label>
+            <input type="text" id="activity-name" name="activity-name" placeholder="Введите название" required>
+
+            <label for="activity-description">Описание:</label>
+            <textarea id="activity-description" name="activity-description" rows="4" placeholder="Введите описание" required></textarea>
+
+            <label for="activity-events">Список событий (через запятую):</label>
+            <input type="text" id="activity-events" name="activity-events" placeholder="Событие 1, Событие 2" required>
+
+            <button type="submit">Добавить</button>
+        </form>
+
+    </div>
+</body>
+</html>
